@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ToDo List</title>
+</head>
+<body>
+    <h1>ToDo List</h1>
+    <form action="/tasks" method="POST">
+        <input type="text" name="title" placeholder="Title" required>
+        <input type="text" name="description" placeholder="Description" required>
+        <button type="submit">Add Task</button>
+    </form>
+    <ul>
+        {{range .}}
+        <li>
+            {{.Title}} - {{.Description}}
+            <form action="/tasks/{{.ID}}" method="POST" style="display:inline;">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+        {{end}}
+    </ul>
+</body>
+</html>
