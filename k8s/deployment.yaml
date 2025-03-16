@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: sre-app
-        image: <ваш-docker-hub-логин>/sre-app:latest
+        image: ${{ secrets.DOCKER_HUB_USERNAME }}/sre-app:latest
         ports:
         - containerPort: 8080
         env:
