@@ -14,20 +14,20 @@ COPY . .
 # Собираем приложение
 RUN go build -o sre-app .
 
-# Используем минимальный образ для финального контейнера
-FROM alpine:3.18
+# Используем образ с поддержкой cgo
+FROM debian:bookworm-slim
 
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
 # Устанавливаем необходимые зависимости для SQLite
-RUN apk add --no-cache sqlite
+RUN apt-get update && apt-get install -y sqlite3
 
 # Копируем собранное приложение из builder
 COPY --from=builder /app/sre-app .
 
 # Создаем non-root пользователя
-RUN adduser -D appuser
+RUN useradd -m appuser
 USER appuser
 
 # Открываем порт, на котором работает приложение
