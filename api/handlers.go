@@ -39,7 +39,11 @@ func addTask(w http.ResponseWriter, r *http.Request) {
     }
 
     if err := db.AddTask(task); err != nil {
-        http.Error(w, err.Error(), http.StatusInternalServerError)
+        if err.Error() == "task already exists" {
+            http.Error(w, err.Error(), http.StatusConflict)  // 409 Conflict
+        } else {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+        }
         return
     }
 
