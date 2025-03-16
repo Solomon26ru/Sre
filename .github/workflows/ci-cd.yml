@@ -32,22 +32,4 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/sre-app:latest .
-        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/sre-app:latest
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Install kubectl
-      uses: azure/setup-kubectl@v3
-
-    - name: Deploy to Kubernetes
-      run: |
-        echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig.yaml
-        export KUBECONFIG=kubeconfig.yaml
-        kubectl apply -f k8s/
+        docker build -t ${{ secrets.DOCKER_HUB
