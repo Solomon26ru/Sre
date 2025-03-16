@@ -2,6 +2,7 @@ package db
 
 import (
     "database/sql"
+    "fmt"  // Добавьте этот импорт
     "log"
 
     _ "github.com/mattn/go-sqlite3"
@@ -52,7 +53,18 @@ func GetTasks() ([]Task, error) {
 }
 
 func AddTask(task Task) error {
-    _, err := db.Exec("INSERT INTO tasks (title, description) VALUES (?, ?)", task.Title, task.Description)
+    // Проверка на дубликаты
+    var count int
+    err := db.QueryRow("SELECT COUNT(*) FROM tasks WHERE title = ? AND description = ?", task.Title, task.Description).Scan(&count)
+    if err != nil {
+        return err
+    }
+    if count > 0 {
+        return fmt.Errorf("task already exists")
+    }
+
+    // Добавление задачи
+    _, err = db.Exec("INSERT INTO tasks (title, description) VALUES (?, ?)", task.Title, task.Description)
     return err
 }
 
